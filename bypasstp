@@ -1,0 +1,168 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "teleport steal bypass - by pitxr",
+   Icon = 0,
+   LoadingTitle = "teleport steal bypass",
+   LoadingSubtitle = "by pitxr",
+   Theme = "Default",
+   DisableRayfieldPrompts = false,
+   DisableBuildWarnings = false,
+   ConfigurationSaving = {
+      Enabled = false,
+      FolderName = nil,
+      FileName = "TeleportGUI"
+   },
+   Discord = {
+      Enabled = false,
+      Invite = "noinvitelink",
+      RememberJoins = true
+   },
+   KeySystem = false,
+   KeySettings = {
+      Title = "Untitled",
+      Subtitle = "Key System",
+      Note = "No method of obtaining the key is provided",
+      FileName = "Key",
+      SaveKey = true,
+      GrabKeyFromSite = false,
+      Key = {"Hello"}
+   }
+})
+
+local TeleportTab = Window:CreateTab("main", 4483362458)
+local TeleportSection = TeleportTab:CreateSection("tp")
+
+local positionInput = ""
+
+local PositionInput = TeleportTab:CreateInput({
+   Name = "pos cords",
+   PlaceholderText = "put pos here",
+   RemoveTextAfterFocusLost = false,
+   Callback = function(Text)
+      positionInput = Text
+   end,
+})
+
+local function parsePosition(text)
+	if not text or text == "" then
+		return nil
+	end
+	
+	local parts = string.split(text, ",")
+	if #parts == 3 then
+		local xStr = string.gsub(parts[1], "^%s*(.-)%s*$", "%1")
+		local yStr = string.gsub(parts[2], "^%s*(.-)%s*$", "%1")
+		local zStr = string.gsub(parts[3], "^%s*(.-)%s*$", "%1")
+		
+		local x = tonumber(xStr)
+		local y = tonumber(yStr)
+		local z = tonumber(zStr)
+		
+		if x and y and z then
+			return Vector3.new(x, y, z)
+		end
+	end
+	return nil
+end
+
+local GetPosButton = TeleportTab:CreateButton({
+   Name = "get current pos",
+   Callback = function()
+      local player = game.Players.LocalPlayer
+      local character = player.Character or player.CharacterAdded:Wait()
+      local hrp = character:FindFirstChild("HumanoidRootPart")
+      
+      if hrp then
+         local pos = hrp.Position
+         local posString = string.format("%.1f, %.1f, %.1f", pos.X, pos.Y, pos.Z)
+         
+         positionInput = posString
+         PositionInput:Set(posString)
+         
+         if setclipboard then
+            setclipboard(posString)
+         end
+         
+         Rayfield:Notify({
+            Title = "got pos",
+            Content = "current pos: " .. posString .. (setclipboard and " (copied)" or ""),
+            Duration = 4,
+            Image = 4483362458,
+         })
+      else
+         Rayfield:Notify({
+            Title = "get pos fail",
+            Content = "humanoidrootpart not found",
+            Duration = 3,
+            Image = 4483362458,
+         })
+      end
+   end,
+})
+
+local TeleportButton = TeleportTab:CreateButton({
+   Name = "teleport to pos",
+   Callback = function()
+      if not positionInput or positionInput == "" then
+         Rayfield:Notify({
+            Title = "no position entered",
+            Content = "please enter cords or use 'get current pos'",
+            Duration = 3,
+            Image = 4483362458,
+         })
+         return
+      end
+      
+      local targetPos = parsePosition(positionInput)
+      if targetPos then
+         local player = game.Players.LocalPlayer
+         local character = player.Character or player.CharacterAdded:Wait()
+         local hrp = character:FindFirstChild("HumanoidRootPart")
+         
+         if hrp then
+            Rayfield:Notify({
+               Title = "tping...",
+               Content = "moving to float pos first",
+               Duration = 3,
+               Image = 4483362458,
+            })
+            
+            local floatPos = Vector3.new(targetPos.X, 94, targetPos.Z)
+            hrp.CFrame = CFrame.new(floatPos)
+            
+            task.wait(5)
+            
+            hrp.CFrame = CFrame.new(targetPos)
+            
+            Rayfield:Notify({
+               Title = "teleported",
+               Content = string.format("teleported to %.1f, %.1f, %.1f", targetPos.X, targetPos.Y, targetPos.Z),
+               Duration = 3,
+               Image = 4483362458,
+            })
+         else
+            Rayfield:Notify({
+               Title = "teleport fail",
+               Content = "humanoidrootpart not found",
+               Duration = 3,
+               Image = 4483362458,
+            })
+         end
+      else
+         Rayfield:Notify({
+            Title = "invalid format",
+            Content = "use format: 0, 0, 0",
+            Duration = 3,
+            Image = 4483362458,
+         })
+      end
+   end,
+})
+
+local InstructionsSection = TeleportTab:CreateSection("instructions")
+
+local Instructions = TeleportTab:CreateParagraph({
+   Title = "how to use",
+   Content = "1. click 'get current pos' to get your cords\n2. or manually enter cords in x, y, z format (e.g., -94, 10, 82)\n3. click 'teleport to pos'\n4. you'll first float at y=94 for 5 seconds\n5. then teleport to the final position"
+})
