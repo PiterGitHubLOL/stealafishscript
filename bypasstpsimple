@@ -81,7 +81,7 @@ teleportButton.MouseButton1Click:Connect(function()
             -- Teleport once to float position (Y=94)
             hrp.CFrame = CFrame.new(floatPos)
             -- Wait 5 seconds there
-            task.wait(15)
+            task.wait(9)
             -- Final teleport to original position
             hrp.CFrame = CFrame.new(targetPos)
         end
