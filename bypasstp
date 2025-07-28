@@ -131,7 +131,7 @@ local TeleportButton = TeleportTab:CreateButton({
             local floatPos = Vector3.new(targetPos.X, 94, targetPos.Z)
             hrp.CFrame = CFrame.new(floatPos)
             
-            task.wait(8)
+            task.wait(9)
             
             hrp.CFrame = CFrame.new(targetPos)
             
