@@ -1,0 +1,30 @@
+{
+  "11815767793": {
+    "_comment": "Ultimate Battlegrounds",
+    "PlaceIds": [11815767793, 101993432229107, 70632463582033],
+    "ScriptId": "9857c5d1738ada74f5424b595592fb25",
+    "AllowHookMethod": false,
+    "Keyless": true
+  },
+  "6961824067": {
+    "_comment": "Fling Things And People",
+    "PlaceIds": [6961824067],
+    "ScriptId": "ebe1af06ea34f5271ab381a8d40c9547",
+    "AllowHookMethod": false,
+    "Keyless": true
+  },
+  "93978595733734": {
+    "_comment": "Violence District",
+    "PlaceIds": [93978595733734],
+    "ScriptId": "cd4d92f5c4495f68c70f2f89de1275e5",
+    "AllowHookMethod": false,
+    "Keyless": true
+  },
+  "93838124426523": {
+    "_comment": "Boom Hood",
+    "PlaceIds": [93838124426523],
+    "ScriptId": "2aca250b632b79d02125d365422ad74d",
+    "AllowHookMethod": false,
+    "Keyless": true
+  }
+}
